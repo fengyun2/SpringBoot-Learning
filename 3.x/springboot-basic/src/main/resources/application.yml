@@ -1,0 +1,12 @@
+lesson: SpringBoot
+server:
+  port: 8080
+enterprise:
+  name: 北京易才教育科技有限公司
+  address: 北京市海淀区中关村软件园
+  age: 16
+  tel: 13000000000
+  subject:
+    - Java
+    - 前端
+    - 大数据
