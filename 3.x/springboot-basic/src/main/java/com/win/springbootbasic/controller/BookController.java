@@ -1,7 +1,7 @@
 package com.win.springbootbasic.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+// import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,19 +18,19 @@ public class BookController {
   @Autowired
   private Enterprise enterprise;
 
-  @Value("${lesson}")
-  private String lessonName;
+  // @Value("${lesson}")
+  // private String lessonName;
 
-  @Value("${server.port}")
-  private int port;
+  // @Value("${server.port}")
+  // private int port;
 
-  @Value("${enterprise.subject[1]}")
-  private String[] subject_01;
+  // @Value("${enterprise.subject[1]}")
+  // private String[] subject_01;
 
-  @GetMapping("list")
-  public String list() {
-    return "lessonName:" + lessonName + "\n" + "port:" + port + "\n" + "subject_01:" + subject_01[0];
-  }
+  // @GetMapping("list")
+  // public String list() {
+  //   return "lessonName:" + lessonName + "\n" + "port:" + port + "\n" + "subject_01:" + subject_01[0];
+  // }
 
   @GetMapping("{id}")
   public String getById(@PathVariable Integer id) {
