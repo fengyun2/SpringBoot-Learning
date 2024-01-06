@@ -14,12 +14,44 @@ user:
   name: win
   age: 18
   birth: 2004/01/01
+
+# 数据源对象是durid
+# 参考文档：https://y0ngb1n.github.io/a/best-practice-samples-datasource-alibaba-druid.html
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/test_db?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
     username: root
     password: root123
     driver-class-name: com.mysql.cj.jdbc.Driver
+    # type: 设置数据源类型为 DruidDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 配置初始化大小、最大、最小
+      initial-size: 5
+      max-active: 20
+      min-idle: 10
+
+      # 配置获取连接等待超时的时间
+      max-wait: 60000
+
+      # 配置间隔多久进行一次检测，检测需要关闭的空闲连接，单位毫秒
+      time-between-eviction-runs-millis: 2000
+      # 配置一个连接在连接池中的最小生存时间，单位毫秒
+      min-evictable-idle-time-millis: 600000
+      max-evictable-idle-time-millis: 900000
+
+      # 用于检测连接是否有效的 SQL 语句
+      validation-query: select 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+
+      keep-alive: true
+      # 通过限制达到一定使用次数后断开重连，使得多个服务器间负载更均衡
+      phy-max-use-count: 100000
+
+      filters: stat
+
 mybatis-plus:
   # 搜索指定包别名
   # type-aliases-package: com.win.springbootbasic.bean
