@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/books")
-public class BookController {
+@RequestMapping("/test")
+public class TestController {
   // 读取全部数据到 Environment 对象中
   @Autowired
   private Environment env;
