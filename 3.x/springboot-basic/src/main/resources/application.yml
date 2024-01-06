@@ -10,3 +10,7 @@ enterprise:
     - Java
     - 前端
     - 大数据
+user:
+  name: win
+  age: 18
+  birth: 2004/01/01
