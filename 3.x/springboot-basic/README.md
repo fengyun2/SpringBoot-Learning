@@ -89,6 +89,57 @@ redis-cli ping
 ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents
 ```
 
+### Lombok
+
+- 实例类
+
+```java
+// 简化JavaBean开发
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private Integer age;
+}
+```
+
+实体类的开发可以手工生成get/set方法，然后覆盖toString()方法。不过这一套操作书写很繁琐，可以使用 `Lombok` 来简化JavaBean开发。
+
+引入 Lombok,用注解代替构造器、getter/setter、toString()等代码。
+
+- @Data ： 注在类上，提供类的get、set、equals、hashCode、toString等方法
+
+- @AllArgsConstructor ：注在类上，提供类的全参构造
+
+- @NoArgsConstructor ：注在类上，提供类的无参构造
+
+- @Setter ：注在属性上，提供 set 方法
+
+- @Getter ：注在属性上，提供 get 方法
+
+- @EqualsAndHashCode ：注在类上，提供对应的 equals 和 hashCode 方法
+
+- @Log4j/@Slf4j ：注在类上，提供对应的 Logger 对象，变量名为 log
+
+Lombok 还可以简化日志开发，例如下面代码：
+
+```java
+@Slf4j
+@RestController
+public class HelloController {
+    @RequestMapping("/hello")
+    public String home(@RequestParam("name") String name){
+        log.info("请求进来了....");
+        return "Hello, Spring Boot 3!"+"你好："+name;
+    }
+}
+```
+
+
 ## 参考文档
 
 1. [SpringBoot-基础篇](https://jwt1399.top/posts/33757.html)
