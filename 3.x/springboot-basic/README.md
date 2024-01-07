@@ -139,6 +139,246 @@ public class HelloController {
 }
 ```
 
+## 如何统一接口封装（消息一致性开发）
+
+如果 SpringBoot 不使用统一返回格式，默认会有如下三种返回情况。
+
+- 返回字符串
+```java
+@GetMapping("/getUserName")
+public String getUserName(){
+    return "Hello";
+}
+
+// 返回结果：Hello
+```
+- 返回实体类对象
+```java
+@GetMapping("/getUserName")
+public User getUserName(){
+    return new User("win", 16);
+}
+
+// 返回结果：{ "name": "win", "age": 16 }
+```
+- 返回异常
+```java
+@GetMapping("/getUserName")
+publics static String getUserName(){
+    HashMap hashMap = new HashMap();
+    return hashMap.get(0).toString(); // 模拟一个空指针异常
+}
+
+// 返回结果：{ "timestamp": 1704611303413, "status": 500, "error": "Internal Server Error", "path": "/getUserName" }
+```
+
+对于上面这几种情况，如果整个项目没有定义统一的返回格式，不同开发人员可能会定义不同的返回格式，这样会使前后端对接出现一些问题。
+
+### a. 定义返回标准
+
+一个标准的返回格式至少包含 3 部分：
+
+```txt
+code: 状态码
+message: 接口调用的提示信息
+data: 返回数据
+```
+
+例如：
+
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "name": "win",
+    "age": 16
+  }
+}
+```
+
+- 步骤 1：定义数据返回格式
+
+```java
+// ResponseResult.java
+
+package com.win.springbootbasic.config.response;
+
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
+public class ResponseResult<T> {
+
+    /**
+     * response timestamp.
+     */
+    private long timestamp;
+
+    /**
+     * response code, 200 -> OK.
+     */
+    private String status;
+
+    /**
+     * response message.
+     */
+    private String message;
+
+    /**
+     * response data.
+     */
+    private T data;
+
+    /**
+     * response success result wrapper.
+     *
+     * @param <T> type of data class
+     * @return response result
+     */
+    public static <T> ResponseResult<T> success() {
+        return success(null);
+    }
+
+    /**
+     * response success result wrapper.
+     *
+     * @param data response data
+     * @param <T>  type of data class
+     * @return response result
+     */
+    public static <T> ResponseResult<T> success(T data) {
+        return ResponseResult.<T>builder().data(data)
+                .message(ResponseStatus.SUCCESS.getDescription())
+                .status(ResponseStatus.SUCCESS.getResponseCode())
+                .timestamp(System.currentTimeMillis())
+                .build();
+    }
+
+    /**
+     * response error result wrapper.
+     *
+     * @param message error message
+     * @param <T>     type of data class
+     * @return response result
+     */
+    public static <T extends Serializable> ResponseResult<T> fail(String message) {
+        return fail(null, message);
+    }
+
+    /**
+     * response error result wrapper.
+     *
+     * @param data    response data
+     * @param message error message
+     * @param <T>     type of data class
+     * @return response result
+     */
+    public static <T> ResponseResult<T> fail(T data, String message) {
+        return ResponseResult.<T>builder().data(data)
+                .message(message)
+                .status(ResponseStatus.FAIL.getResponseCode())
+                .timestamp(System.currentTimeMillis())
+                .build();
+    }
+
+
+}
+```
+
+- 步骤 2：定义状态码
+
+```java
+// ResponseStatus.java
+
+package com.win.springbootbasic.config.response;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum ResponseStatus {
+
+    SUCCESS("200", "success"),
+    FAIL("500", "failed"),
+
+    HTTP_STATUS_200("200", "ok"),
+    HTTP_STATUS_400("400", "request error"),
+    HTTP_STATUS_401("401", "no authentication"),
+    HTTP_STATUS_403("403", "no authorities"),
+    HTTP_STATUS_500("500", "server error");
+
+    public static final List<ResponseStatus> HTTP_STATUS_ALL = Collections.unmodifiableList(
+            Arrays.asList(HTTP_STATUS_200, HTTP_STATUS_400, HTTP_STATUS_401, HTTP_STATUS_403, HTTP_STATUS_500
+            ));
+
+    /**
+     * response code
+     */
+    private final String responseCode;
+
+    /**
+     * description.
+     */
+    private final String description;
+
+}
+
+```
+
+- 步骤 3：使用
+
+```java
+//示例1
+@GetMapping("/getUserName")
+public Result getUserName(){
+    return Result.success("Hello");
+}
+
+//示例2
+@GetMapping("/getUserName")
+public static Result getUserName(){
+  HashMap hashMap = new HashMap();
+  return Result.success(hashMap.get(0).toString()); // 模拟一个空指针异常
+}
+```
+
+返回结果如下：
+
+```txt
+# 示例1结果
+{
+    "status": 0,
+    "message": "成功",
+    "data": "Hello"
+}
+
+# 示例2结果
+{
+    "timestamp": 1704611303413,
+    "status": 500,
+    "error": "Internal Server Error",
+    "path": "/getUserName"
+}
+```
+
+### b. 统一接口返回
+
+### c. 全局异常处理
+
+
 
 ## 参考文档
 
