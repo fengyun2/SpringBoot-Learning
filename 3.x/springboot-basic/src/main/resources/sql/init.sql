@@ -1,18 +1,3 @@
-# 技术栈
-
-- Lombok 快速制作实体类
-- Redis 内存数据库
-- Mybatis 通用数据库操作
-- Mybatis-plus 简化Mybatis操作
-- SpringMVC
-- SpringSecurity
-- SpringBoot
-
-### 数据表
-
-- Book 测试表
-
-```sql
 SET NAMES utf8;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -47,50 +32,3 @@ INSERT INTO `tbl_book` VALUES (13, 'Spring实战第5版', '计算机理论', 'Sp
 INSERT INTO `tbl_book` VALUES (14, 'Spring 5核心原理与30个类手写实战', '计算机理论', '十年沉淀之作，写Spring精华思想');
 
 SET FOREIGN_KEY_CHECKS = 1;
-```
-
-### Mac安装Redis
-
-- 使用 Homebrew 安装 Redis
-
-```bash
-brew install redis
-```
-
-- 启动 Redis
-
-```bash
-redis-server
-
-# 或者使用 brew services 启动
-brew services start redis
-
-# 手动启动命令：
-redis-server /usr/local/etc/redis.conf
-```
-
-- 停止 Redis
-
-```bash
-brew services stop redis
-```
-
-- 检查 Redis 状态
-
-```bash
-redis-cli ping
-```
-
-如果返回 PONG，说明 Redis 已经启动成功。
-
-- 另外，你可以让Redis随着机器启动而自动启动
-
-```bash
-ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents
-```
-
-## 参考文档
-
-1. [SpringBoot-基础篇](https://jwt1399.top/posts/33757.html)
-2. [SpringBoot-整合篇](https://jwt1399.top/posts/58591.html)
-3. [Java 全栈知识体系](https://pdai.tech) , 推荐，比较全，有案例
