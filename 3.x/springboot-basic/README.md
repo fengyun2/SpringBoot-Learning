@@ -376,6 +376,50 @@ public static Result getUserName(){
 
 ### b. 统一接口返回
 
+前面步骤不够优雅，可以继续改进，用 `@RestControllerAdvice` 注解，拦截后端返回的数据，实现 `ResponseBodyAdvice` 接口对数据做一层包装再返回给前端。
+
+> `ResponseBodyAdvice`: 该接口是 SpringMVC 4.1 提供的，它允许在 执行`@ResponseBody` 后自定义返回数据，用来封装统一数据格式返回；拦截 Controller 方法的返回值，统一处理返回值/响应体，一般用来统一返回格式，加解密，签名等。
+`@RestControllerAdvice`: 该注解是 Controller 的增强版，可以全局捕获抛出的异常，全局数据绑定，全局数据预处理。
+
+- 步骤 1：新建 ResponseAdvice 类，该类用于统一封装 Controller 中接口的返回结果。实现 ResponseBodyAdvice 接口，实现 supports、beforeBodyWrite 方法。
+
+```java
+@RestControllerAdvice
+public class ResponseAdvice implements ResponseBodyAdvice<Object> {
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    /**
+     * 是否开启功能 true:开启
+     */
+    @Override
+    public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
+        return true;
+    }
+
+    /**
+     * 处理返回结果
+     */
+    @Override
+    public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
+        //处理字符串类型数据
+        if(o instanceof String){
+            try {
+                return objectMapper.writeValueAsString(Result.success(o));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+        //返回类型是否已经封装
+        if(o instanceof Result){
+            return o;
+        }
+        return Result.success(o);
+    }
+}
+```
+
+
 ### c. 全局异常处理
 
 

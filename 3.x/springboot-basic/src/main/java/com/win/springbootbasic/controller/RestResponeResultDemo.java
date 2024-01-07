@@ -44,4 +44,23 @@ public class RestResponeResultDemo {
   public ResponseResult<String> getUserNameError() {
     return ResponseResult.fail("获取用户信息异常");
   }
+
+  /**
+   * http://localhost:8080/restful/globalBodyResponse
+   * 使用ResponseAdvice(@RestControllerAdvice)统一处理异常,无需使用ResponseResult.success/fail封装，直接使用即可
+   * @return
+   */
+  @GetMapping("globalBodyResponse")
+  public String globalBodyResponse() {
+    HashMap hashMap = new HashMap<>();
+    return hashMap.get(0).toString(); // 模拟一个空指针异常
+  }
+  /**
+   * http://localhost:8080/restful/sayHi
+   * @return
+   */
+  @GetMapping("sayHi")
+  public String sayHi() {
+    return "Hi";
+  }
 }
