@@ -51,6 +51,18 @@ spring:
       phy-max-use-count: 100000
 
       filters: stat
+  redis:
+    database: 0
+    host: 127.0.0.1 #指定redis所在的host
+    port: 6379  #指定redis的端口
+    password:  #设置redis密码
+    lettuce:
+      pool:
+        max-active: 8 #最大连接数
+        max-idle: 8 #最大空闲数
+        min-idle: 0 #最小空闲数
+        max-wait: 100ms #连接等待时间
+    connect-timeout: 30000ms
 
 mybatis-plus:
   # 搜索指定包别名
