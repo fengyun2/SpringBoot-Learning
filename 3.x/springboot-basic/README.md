@@ -422,7 +422,46 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
 ### c. 全局异常处理
 
+>遇到异常时，第一时间想到的应该是try…catch，不过这种方式会导致大量代码重复，维护困难等问题，这里不用手写try…catch，由全局异常处理器统一捕获；对于自定义异常，只能通过全局异常处理器来处理，使用全局异常处理器最大的便利就是程序员在写代码时不再需要手写 try…catch了。
 
+- 步骤 1：首先新增一个类，增加 `@RestControllerAdvice` 注解，如果我们有想要拦截的异常类型，就新增一个方法，使用 `@ExceptionHandler` 注解修饰，注解参数为目标异常类型。
+
+例如：controller中接口发生Exception异常时，就会进入到Exception方法中进行捕获，将杂乱的异常信息，转换成指定格式后交给ResponseAdvice方法进行统一格式封装并返回给前端。
+```java
+@RestControllerAdvice
+@Slf4j
+public class ExceptionAdvice {
+
+    @ExceptionHandler(Exception.class)
+    public Result Execption(Exception e) {
+        log.error("未知异常！", e);
+        //e.printStackTrace();
+        return Result.fail(ResultMsgEnum.TEST_ERROR);
+    }
+    //还可定义其它拦截异常方法
+    //。。。。。。
+}
+```
+
+- 步骤 2：使用
+
+```java
+@GetMapping("/getUserName")
+public static String getUserName(){
+    HashMap hashMap = new HashMap();
+    return hashMap.get(0).toString(); // 模拟一个空指针异常
+}
+```
+
+- 步骤 3：返回结果
+
+```txt
+{
+  "code": 400,
+  "message": "发生错误啦!",
+  "data": null
+}
+```
 
 ## 参考文档
 
