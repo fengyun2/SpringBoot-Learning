@@ -1,2 +1,10 @@
 server:
   port: 3003
+
+# SpringDocs文档配置
+springdocs:
+  title: SpringBoot3.2 API Docs
+  description: SpringBoot3.2 API Docs
+  version: 1.0.0
+  scheme: Bearer
+  header: Authorization
