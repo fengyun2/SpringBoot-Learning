@@ -3,10 +3,10 @@ package com.win.springbootmybatisplusgenerator.cms;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.baomidou.mybatisplus.generator.FastAutoGenerator;
-import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+// import com.baomidou.mybatisplus.generator.FastAutoGenerator;
+// import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
+// import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+// import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
 @SpringBootApplication
 public class CmsApplication {
@@ -18,18 +18,6 @@ public class CmsApplication {
 	}
 
   public static void init() {
-    FastAutoGenerator.create("jdbc:mysql://localhost:3306/mybatis-plus-generator", "root", "root123")
-        .globalConfig(builder ->
-                builder.author("author").outputDir(System.getProperty("user.dir") + "/src/main/java")
-                .build())
-        .packageConfig(
-                builder -> builder.parent("com.win.springbootmybatisplusgenerator.cms").moduleName("user").build())
-        .strategyConfig(
-                builder -> builder.addInclude("user").entityBuilder().enableLombok()
-                        .disableSerialVersionUID().build()
-        )
-        // .templateEngine(new FreemarkerTemplateEngine())
-        .execute();
 
     // new DataSourceConfig.Builder("jdbc:mysql://127.0.0.1:3306/mybatis-plus-generator","root","root123")
     // .build();

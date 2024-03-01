@@ -22,7 +22,7 @@ public class JavaGeneratorImpl  implements IJavaGeneratorService {
 
     fastAutoGenerator.globalConfig(builder -> {
             builder.author(author) // 设置作者
-                    .enableSwagger() // 开启swagger 模式
+                    // .enableSwagger() // 开启swagger 模式
                     .disableOpenDir() // 禁止打开输出目录
                     .dateType(DateType.TIME_PACK)
                     .commentDate("yyyy-MM-dd HH:mm:ss")
@@ -43,6 +43,7 @@ public class JavaGeneratorImpl  implements IJavaGeneratorService {
         .strategyConfig(builder -> {
             builder.addInclude(tableName); // 设置需要生成的表名
                   // .addTablePrefix(null) // 设置需要过滤表前缀
+
             builder.entityBuilder()
                   .enableFileOverride()
                   .enableLombok()
@@ -79,7 +80,6 @@ public class JavaGeneratorImpl  implements IJavaGeneratorService {
                     .build();
         })
         .templateEngine(new VelocityTemplateEngine())
-        // .templateEngine(new FreemarkerTemplateEngine())
         .execute();
   }
 }

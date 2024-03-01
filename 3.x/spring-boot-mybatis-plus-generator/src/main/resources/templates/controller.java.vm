@@ -1,6 +1,22 @@
 package ${package.Controller};
 
+import java.util.List;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+
+import ${package.Entity}.User;
+import ${package.Service}.impl.UserServiceImpl;
+
 #if(${restControllerStyle})
 import org.springframework.web.bind.annotation.RestController;
 #else
@@ -32,7 +48,40 @@ class ${table.controllerName}#if(${superControllerClass}) : ${superControllerCla
 public class ${table.controllerName} extends ${superControllerClass} {
 #else
 public class ${table.controllerName} {
-#end
+  @Autowired
+  private ${table.serviceImplName} ${table.entityPath}Service;
 
+  @GetMapping("/list")
+  public AjaxResult list() {
+    List<${entity}> list = ${table.entityPath}Service.list();
+    return new AjaxResult().success(list);
+  }
+
+  @GetMapping("/page")
+  public AjaxResult page(Page<${entity}> page, ${entity} ${table.entityPath}) {
+    IPage<${entity}> ${table.entityPath}Ipage = ${table.entityPath}Service.page(page, ${table.entityPath});
+    return new AjaxResult().success(${table.entityPath}Ipage);
+  }
+
+  @GetMapping(value = "/{id}")
+  public AjaxResult getById(@PathVariable Long id) {
+    return new AjaxResult().success(${table.entityPath}Service.getById(id));
+  }
+
+  @PostMapping("/save")
+  public AjaxResult save(@RequestBody ${entity} ${table.entityPath}) {
+    return new AjaxResult().success(${table.entityPath}Service.save(${table.entityPath}));
+  }
+
+  @PutMapping("/updateById")
+  public AjaxResult updateById(@RequestBody ${entity} ${table.entityPath}) {
+    return new AjaxResult().success(${table.entityPath}Service.updateById(${table.entityPath}));
+  }
+
+  @DeleteMapping("/{id}")
+  public AjaxResult remove(@PathVariable Long id) {
+    return new AjaxResult().success(${table.entityPath}Service.removeById(id));
+  }
+#end
 }
 #end

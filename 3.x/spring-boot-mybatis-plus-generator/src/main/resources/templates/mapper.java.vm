@@ -1,5 +1,6 @@
 package ${package.Mapper};
 
+import org.apache.ibatis.annotations.Mapper;
 import ${package.Entity}.${entity};
 import ${superMapperClassPackage};
 #if(${mapperAnnotationClass})
@@ -20,6 +21,7 @@ import ${mapperAnnotationClass.name};
 #if(${kotlin})
 interface ${table.mapperName} : ${superMapperClass}<${entity}>
 #else
+@Mapper
 public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
 
 }
