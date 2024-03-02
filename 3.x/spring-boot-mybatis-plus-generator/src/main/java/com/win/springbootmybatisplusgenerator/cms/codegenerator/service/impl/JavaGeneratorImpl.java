@@ -2,11 +2,15 @@ package com.win.springbootmybatisplusgenerator.cms.codegenerator.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.TemplateType;
+import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
+import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
+import com.baomidou.mybatisplus.generator.fill.Column;
 import com.win.springbootmybatisplusgenerator.cms.codegenerator.service.IJavaGeneratorService;
 
 @Service
@@ -47,19 +51,30 @@ public class JavaGeneratorImpl  implements IJavaGeneratorService {
             builder.entityBuilder()
                   .enableFileOverride()
                   .enableLombok()
+                  .enableChainModel()
                   .enableTableFieldAnnotation()
-                  .addTableFills()
+                  .versionColumnName("version")
+                  .logicDeleteColumnName("deleted")
+                  .naming(NamingStrategy.underline_to_camel) // 数据库表映射到实体的命名策略
+                  .columnNaming(NamingStrategy.underline_to_camel) // 数据库表字段映射到实体的命名策略
+                  .addSuperEntityColumns("id", "create_by", "create_time", "updated_by", "updated_time") // 添加父类公共字段
+                  // .addIgnoreColumns("age") // 添加忽略字段
+                  .addTableFills(new Column("create_time", FieldFill.INSERT))
+                  .addTableFills(new Column("updated_time", FieldFill.INSERT_UPDATE))
                   .idType(IdType.AUTO)
+                  // .formatFileName("%sEntity")
                   .build();
             builder.controllerBuilder()
                   .enableFileOverride()
-                  .enableRestStyle()
+                  .enableHyphenStyle() // 开启驼峰转连字符
+                  .enableRestStyle() // 开启生成 @RestController 控制器
                   .build();
             builder.serviceBuilder()
                   .enableFileOverride()
                   .build();
             builder.mapperBuilder()
                   .enableFileOverride()
+                  .mapperAnnotation(Mapper.class)
                   .enableBaseResultMap()
                   .enableBaseColumnList()
                   .build();

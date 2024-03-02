@@ -59,7 +59,7 @@ public class ${table.controllerName} {
 
   @GetMapping("/page")
   public AjaxResult page(Page<${entity}> page, ${entity} ${table.entityPath}) {
-    IPage<${entity}> ${table.entityPath}Ipage = ${table.entityPath}Service.page(page, ${table.entityPath});
+    IPage<${entity}> ${table.entityPath}Ipage = ${table.entityPath}Service.page(page);
     return new AjaxResult().success(${table.entityPath}Ipage);
   }
 
